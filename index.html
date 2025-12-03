@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全方位美肌諮詢表</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* --- 全局設定 --- */
+        body {
+            font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
+            background-color: #fceef2; /* 淺粉背景 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            color: #4a4a4a;
+        }
+
+        h1 {
+            color: #b05c75;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* --- 輸入表單區域 --- */
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 600px; /* 加寬 */
+            box-sizing: border-box;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            color: #fff;
+            background-color: #b05c75;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin: 25px 0 15px 0;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 1.05em;
+        }
+
+        .sub-label {
+            font-size: 0.85em;
+            color: #999;
+            margin-left: 5px;
+            font-weight: normal;
+        }
+
+        input[type="text"], 
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            background: #fafafa;
+            box-sizing: border-box;
+            transition: border 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: #b05c75;
+            outline: none;
+            background: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* 選項樣式 */
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .radio-group label, .checkbox-group label {
+            font-weight: normal;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            background: #f4f4f4;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.95em;
+            transition: background 0.2s;
+        }
+
+        .radio-group label:hover, .checkbox-group label:hover {
+            background: #eadddf;
+        }
+
+        input[type="radio"], input[type="checkbox"] {
+            margin-right: 6px;
+            transform: scale(1.1);
+        }
+
+        /* 隱藏的詳細輸入框 (選是才會出現) */
+        .detail-input {
+            display: none; /* 預設隱藏 */
+            margin-top: 10px;
+            padding-left: 10px;
+            border-left: 3px solid #b05c75;
+        }
+        
+        .detail-input.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background-color: #b05c75;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(176, 92, 117, 0.3);
+            transition: transform 0.1s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* --- 產出圖片的模板樣式 --- */
+        #capture-area {
+            width: 600px;
+            background: #fff;
+            padding: 40px;
+            box-sizing: border-box;
+            position: absolute;
+            top: -9999px; left: -9999px;
+            border-top: 15px solid #b05c75;
+        }
+
+        #capture-area h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 28px;
+        }
+        
+        .res-header {
+            text-align: center;
+            color: #b05c75;
+            font-weight: bold;
+            margin-bottom: 30px;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        .res-grid-basic {
+            display: flex;
+            justify-content: space-between;
+            background: #fdf2f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .res-section {
+            margin-top: 25px;
+        }
+
+        .res-section-title {
+            background: #333;
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 16px;
+            display: inline-block;
+            margin-bottom: 10px;
+            border-radius: 3px;
+        }
+
+        .res-row {
+            display: flex;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .res-label {
+            min-width: 160px;
+            font-weight: bold;
+            color: #b05c75;
+        }
+
+        .res-value {
+            flex: 1;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .footer-credit {
+            margin-top: 30px;
+            text-align: right;
+            font-size: 12px;
+            color: #aaa;
+            border-top: 2px solid #b05c75;
+            padding-top: 10px;
+        }
+
+        /* 輸出結果區 */
+        #output-container {
+            margin-top: 20px;
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        #output-container img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .hint { color: #d63384; font-weight: bold; margin: 10px 0; }
+
+    </style>
+</head>
+<body>
+
+    <h1>✨ 顧客美肌諮詢表 ✨</h1>
+    <div class="subtitle">請耐心填寫以下資訊，讓我們更了解您的肌膚狀況</div>
+
+    <div class="form-container">
+        
+        <div class="section-title">基本資料</div>
+        
+        <div class="form-group">
+            <label>1. 年齡</label>
+            <input type="number" id="q1" placeholder="請填寫數字">
+        </div>
+
+        <div class="form-group">
+            <label>2. 性別</label>
+            <div class="radio-group">
+                <label><input type="radio" name="q2" value="男生"> 男生</label>
+                <label><input type="radio" name="q2" value="女生"> 女生</label>
+            </div>
+        </div>
+
+        <div class="section-title">肌膚狀況與保養習慣</div>
+
+        <div class="form-group">
+            <label>3. 膚質 & 目前狀況 (可複選)</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="q3" value="乾肌"> 乾肌</label>
+                <label><input type="checkbox" name="q3" value="油肌"> 油肌</label>
+                <label><input type="checkbox" name="q3" value="混合肌"> 混合肌</label>
+                <label><input type="checkbox" name="q3" value="敏感肌"> 敏感肌</label>
+                <label><input type="checkbox" name="q3" value="酒糟肌"> 酒糟肌</label>
+                <label><input type="checkbox" name="q3" value="敏感混合肌"> 敏感混合肌</label>
+                <label><input type="checkbox" name="q3" value="敏感油肌"> 敏感油肌</label>
+                <label><input type="checkbox" name="q3" value="痘痘肌"> 痘痘肌</label>
+            </div>
+            <input type="text" id="q3_note" placeholder="備註..." style="margin-top:10px;">
+        </div>
+
+        <div class="form-group">
+            <label>4. 產品使用方法 <span class="sub-label">(請詳細寫下順序)</span></label>
+            <textarea id="q4" placeholder="例如：化妝水 -> 精華液..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>5. 平時洗臉方式 <span class="sub-label">(早/晚)</span></label>
+            <textarea id="q5" placeholder="例如：早上清水，晚上卸妝+洗面乳..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>6. 平時使用的保養品牌 <span class="sub-label">(請列出詳細品牌)</span></label>
+            <textarea id="q6" placeholder="請填寫品牌名稱..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>7. 藥物或保健食品 <span class="sub-label">(如：A酸、A醇、杏仁酸等)</span></label>
+            <textarea id="q7" placeholder="無，或請詳細列出..."></textarea>
+        </div>
+
+        <div class="section-title">生活作息與健康狀況</div>
+
+        <div class="form-group">
+            <label>8. 最近是否有曬太陽？</label>
+            <div class="radio-group">
+                <label><input type="radio" name="q8" value="有" onclick="toggle('q8_detail', true)"> 有</label>
+                <label><input type="radio" name="q8" value="否" onclick="toggle('q8_detail', false)"> 否</label>
+            </div>
+            <div id="q8_detail" class="detail-input">
+                <input type="text" id="q8_text" placeholder="請問時間多久？ (例如：去海邊曬了3小時)">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>9. 最近是否月經要來？</label>
+            <div class="radio-group">
+                <label><input type="radio" name="q9" value="是" onclick="toggle('q9_detail', true)"> 有</label>
+                <label><input type="radio" name="q9" value="否" onclick="toggle('q9_detail', false)"> 否</label>
+            </div>
+            <input type="text" id="q9" placeholder="請描述 (例如：快來了/剛走/不規律，經期時間？)">
+        </div>
+
+        <div class="form-group">
+            <label>10. 是否懷孕？</label>
+            <div class="radio-group">
+                <label><input type="radio" name="q10" value="有" onclick="toggle('q10_detail', true)"> 有</label>
+                <label><input type="radio" name="q10" value="否" onclick="toggle('q10_detail', false)"> 否</label>
+            </div>
+            <div id="q10_detail" class="detail-input">
+                <input type="text" id="q10_text" placeholder="目前幾週？">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>11. 產後幾個月？</label>
+            <input type="text" id="q11" placeholder="若無請填無">
+        </div>
+
+        <div class="form-group">
+            <label>12. 是否常熬夜？</label>
+            <div class="radio-group">
+                <label><input type="radio" name="q12" value="是"> 是</label>
+                <label><input type="radio" name="q12" value="否"> 否</label>
+            </div>
+            <div style="margin-top:10px;">
+                <label class="sub-label">平常睡覺時間 (幾點到幾點)：</label>
+                <input type="text" id="q12_time" placeholder="例如：01:00 - 08:00">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>13. 每日飲水量 <span class="sub-label">(純水，不含飲料/茶/咖啡)</span></label>
+            <input type="text" id="q13" placeholder="例如：2000 ml">
+        </div>
+
+        <div class="form-group">
+            <label>14. 是否有其他疾病史？</label>
+            <input type="text" id="q14" placeholder="無，或請填寫...">
+        </div>
+
+        <div class="form-group">
+            <label>15. 最近是否有感冒、擤鼻涕？</label>
+            <div class="radio-group">
+                <label><input type="radio" name="q15" value="是" onclick="toggle('q15_detail', true)"> 是</label>
+                <label><input type="radio" name="q15" value="否" onclick="toggle('q15_detail', false)"> 否</label>
+            </div>
+            <div id="q15_detail" class="detail-input">
+                <input type="text" id="q15_text" placeholder="持續多久時間？">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>16. 最近是否常戴口罩？</label>
+            <div class="radio-group">
+                <label><input type="radio" name="q16" value="是"> 是</label>
+                <label><input type="radio" name="q16" value="否"> 否</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>17. 使用前或最近是否有擠痘痘、做臉、醫美療程？</label>
+            <div class="radio-group">
+                <label><input type="radio" name="q17" value="有" onclick="toggle('q17_detail', true)"> 有</label>
+                <label><input type="radio" name="q17" value="否" onclick="toggle('q17_detail', false)"> 否</label>
+            </div>
+            <div id="q17_detail" class="detail-input">
+                <input type="text" id="q17_text" placeholder="請問是哪種項目？(雷射/清粉刺/刷酸...)">
+            </div>
+        </div>
+
+        <button onclick="generateImage()">提交並產生圖片檔案</button>
+    </div>
+
+    <div id="capture-area">
+        <h2>顧客膚況諮詢紀錄</h2>
+        <div class="res-header">PROFESSIONAL SKIN CONSULTATION</div>
+        
+        <div class="res-grid-basic">
+            <div><strong>日期：</strong><span id="resDate"></span></div>
+            <div><strong>年齡：</strong><span id="resQ1"></span> 歲</div>
+            <div><strong>性別：</strong><span id="resQ2"></span></div>
+        </div>
+
+        <div class="res-section">
+            <div class="res-section-title">A. 肌膚與保養</div>
+            <div class="res-row"><div class="res-label">膚質狀況：</div><div class="res-value" id="resQ3"></div></div>
+            <div class="res-row"><div class="res-label">產品使用方法：</div><div class="res-value" id="resQ4"></div></div>
+            <div class="res-row"><div class="res-label">洗臉方式：</div><div class="res-value" id="resQ5"></div></div>
+            <div class="res-row"><div class="res-label">使用保養品牌：</div><div class="res-value" id="resQ6"></div></div>
+            <div class="res-row"><div class="res-label">藥物/保健食品：</div><div class="res-value" id="resQ7"></div></div>
+            <div class="res-row"><div class="res-label">醫美/做臉療程：</div><div class="res-value" id="resQ17"></div></div>
+        </div>
+
+        <div class="res-section">
+            <div class="res-section-title">B. 生活作息與健康</div>
+            <div class="res-row"><div class="res-label">近期曬太陽：</div><div class="res-value" id="resQ8"></div></div>
+            <div class="res-row"><div class="res-label">月經狀況：</div><div class="res-value" id="resQ9"></div></div>
+            <div class="res-row"><div class="res-label">懷孕/產後：</div><div class="res-value" id="resQ10_11"></div></div>
+            <div class="res-row"><div class="res-label">睡眠狀況：</div><div class="res-value" id="resQ12"></div></div>
+            <div class="res-row"><div class="res-label">每日飲水量：</div><div class="res-value" id="resQ13"></div></div>
+            <div class="res-row"><div class="res-label">其他疾病：</div><div class="res-value" id="resQ14"></div></div>
+            <div class="res-row"><div class="res-label">感冒/擤鼻涕：</div><div class="res-value" id="resQ15"></div></div>
+            <div class="res-row"><div class="res-label">常戴口罩：</div><div class="res-value" id="resQ16"></div></div>
+        </div>
+
+        <div class="footer-credit">Giver Team - 專業美肌顧問系統</div>
+    </div>
+
+    <div id="output-container">
+        <h3>✅ 諮詢卡已生成</h3>
+        <p class="hint">請長按圖片進行儲存</p>
+        <div id="img-placeholder"></div>
+    </div>
+
+    <script>
+        // 切換顯示詳細輸入框
+        function toggle(id, show) {
+            const el = document.getElementById(id);
+            if(show) {
+                el.classList.add('show');
+            } else {
+                el.classList.remove('show');
+            }
+        }
+
+        // 取得單選或多選的值
+        function getVal(name) {
+            const els = document.getElementsByName(name);
+            for(let el of els) {
+                if(el.checked) return el.value;
+            }
+            return ""; // 未填
+        }
+
+        function getMultiVal(name) {
+            const els = document.querySelectorAll(`input[name="${name}"]:checked`);
+            let arr = [];
+            els.forEach(el => arr.push(el.value));
+            return arr;
+        }
+
+        function generateImage() {
+            // --- 1. 收集資料 ---
+            const date = new Date().toLocaleDateString();
+            const q1 = document.getElementById('q1').value;
+            const q2 = getVal('q2');
+
+            // Q3 膚質
+            let q3_arr = getMultiVal('q3');
+            let q3_note = document.getElementById('q3_note').value;
+            let q3_final = q3_arr.join("、");
+            if(q3_note) q3_final += (q3_final ? "，" : "") + "備註：" + q3_note;
+
+            const q4 = document.getElementById('q4').value;
+            const q5 = document.getElementById('q5').value;
+            const q6 = document.getElementById('q6').value;
+            const q7 = document.getElementById('q7').value;
+
+            // Q8 曬太陽 (邏輯處理)
+            let q8_main = getVal('q8');
+            let q8_detail = document.getElementById('q8_text').value;
+            let q8_final = q8_main === "有" ? `有，${q8_detail}` : q8_main;
+
+            const q9 = document.getElementById('q9').value;
+
+            // Q10 & 11 懷孕產後
+            let q10_main = getVal('q10');
+            let q10_detail = document.getElementById('q10_text').value;
+            let q10_str = q10_main === "有" ? `懷孕中 (${q10_detail})` : (q10_main || "未填");
+            let q11 = document.getElementById('q11').value;
+            let q10_11_final = `${q10_str} / 產後：${q11}`;
+
+            // Q12 睡眠
+            let q12_main = getVal('q12');
+            let q12_time = document.getElementById('q12_time').value;
+            let q12_final = `熬夜：${q12_main} (睡眠時間：${q12_time})`;
+
+            const q13 = document.getElementById('q13').value;
+            const q14 = document.getElementById('q14').value;
+
+            // Q15 感冒
+            let q15_main = getVal('q15');
+            let q15_detail = document.getElementById('q15_text').value;
+            let q15_final = q15_main === "是" ? `是，${q15_detail}` : q15_main;
+
+            let q16 = getVal('q16');
+
+            // Q17 醫美
+            let q17_main = getVal('q17');
+            let q17_detail = document.getElementById('q17_text').value;
+            let q17_final = q17_main === "有" ? `有，${q17_detail}` : q17_main;
+
+            // --- 2. 驗證 (僅檢查必填的年齡) ---
+            if(!q1) { alert("請填寫年齡！"); return; }
+
+            // --- 3. 填入模板 ---
+            document.getElementById('resDate').innerText = date;
+            document.getElementById('resQ1').innerText = q1;
+            document.getElementById('resQ2').innerText = q2;
+            document.getElementById('resQ3').innerText = q3_final || "未填寫";
+            document.getElementById('resQ4').innerText = q4 || "未填寫";
+            document.getElementById('resQ5').innerText = q5 || "未填寫";
+            document.getElementById('resQ6').innerText = q6 || "未填寫";
+            document.getElementById('resQ7').innerText = q7 || "未填寫";
+            
+            document.getElementById('resQ8').innerText = q8_final || "未填寫";
+            document.getElementById('resQ9').innerText = q9 || "未填寫";
+            document.getElementById('resQ10_11').innerText = q10_11_final;
+            document.getElementById('resQ12').innerText = q12_final;
+            document.getElementById('resQ13').innerText = q13 || "未填寫";
+            document.getElementById('resQ14').innerText = q14 || "無";
+            document.getElementById('resQ15').innerText = q15_final || "未填寫";
+            document.getElementById('resQ16').innerText = q16 || "未填寫";
+            document.getElementById('resQ17').innerText = q17_final || "未填寫";
+
+            // --- 4. 生成圖片 ---
+            const captureArea = document.getElementById('capture-area');
+            const outputContainer = document.getElementById('output-container');
+            const imgPlaceholder = document.getElementById('img-placeholder');
+
+            // 先清空舊圖
+            imgPlaceholder.innerHTML = '';
+            outputContainer.style.display = 'block';
+
+            html2canvas(captureArea, {
+                scale: 2, // 提高清晰度
+                backgroundColor: "#ffffff"
+            }).then(canvas => {
+                const imgData = canvas.toDataURL("image/png");
+                const img = document.createElement('img');
+                img.src = imgData;
+                imgPlaceholder.appendChild(img);
+                
+                // 捲動到下方
+                outputContainer.scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+    </script>
+
+</body>
+
+</html>
